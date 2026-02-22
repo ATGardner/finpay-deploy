@@ -1,0 +1,7 @@
+variable "Project.Helm.Release" {
+    value "merchant-#{Octopus.Deployment.Tenant.Slug}-#{Octopus.Environment.Name}" {}
+}
+
+variable "Project.Helm.Values" {
+    value "values-#{Octopus.Environment.Name | ToLower}.yaml" {}
+}

@@ -1,0 +1,64 @@
+step "approve-before-production" {
+    name = "Approve before production"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Approve before Production"
+            Octopus.Action.Manual.ResponsibleTeamIds = "global/risk"
+        }
+    }
+}
+
+step "deploy-a-helm-chart" {
+    name = "Deploy a Helm Chart"
+    properties = {
+        Octopus.Action.TargetRoles = "merchants-k8s"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.GitRepository.Source = "External"
+            Octopus.Action.Helm.ChartDirectory = "charts/merchant-portal"
+            Octopus.Action.Helm.Namespace = "#{Tenant.Helm.Namespace}"
+            Octopus.Action.Helm.ReleaseName = "#{Project.Helm.Release}"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Helm.TemplateValuesSources = <<-EOT
+                [
+                  {
+                    "Type": "InlineYaml",
+                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}\n  DATA_REGION: #{Tenant.DataRegion}"
+                  },
+                  {
+                    "Type": "GitRepository",
+                    "GitRepositorySource": "External",
+                    "GitDependencyName": "TemplateValues-1",
+                    "ValuesFilePaths": "charts/merchant-portal/values.yaml\ncharts/merchant-portal/#{Project.Helm.Values}"
+                  }
+                ]
+                EOT
+            Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+        }
+        tenant_tags = ["asd/qwe"]
+        worker_pool = "hosted-windows"
+        worker_pool_variable = ""
+
+        git_dependencies {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-1"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/ATGardner/finpay-deploy"
+        }
+
+        git_dependencies "TemplateValues-1" {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-1"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/ATGardner/finpay-deploy"
+        }
+    }
+}
