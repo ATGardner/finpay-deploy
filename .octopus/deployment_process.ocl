@@ -30,7 +30,7 @@ step "deploy-a-helm-chart" {
                 [
                   {
                     "Type": "InlineYaml",
-                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}\n  DATA_REGION: #{Tenant.DataRegion}  SOMETHING: else"
+                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}\n  DATA_REGION: #{Tenant.DataRegion}\n  SOMETHING: else"
                   },
                   {
                     "Type": "GitRepository",
