@@ -1,3 +1,26 @@
+step "run-a-script" {
+    name = "Run a Script"
+    properties = {
+        Octopus.Action.TargetRoles = "merchants-k8s"
+    }
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                echo "color: $(get_octopusvariable "Tenant.BrandColor")"
+                echo "region $(get_octopusvariable "Tenant.DataRegion")"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "Bash"
+            OctopusUseBundledTooling = "False"
+        }
+        tenant_tags = ["asd/qwe"]
+        worker_pool_variable = ""
+    }
+}
+
 step "approve-before-production" {
     name = "Approve before production"
 
