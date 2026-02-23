@@ -23,7 +23,6 @@ step "deploy-a-helm-chart" {
         action_type = "Octopus.HelmChartUpgrade"
         properties = {
             Octopus.Action.GitRepository.Source = "External"
-            Octopus.Action.Helm.AdditionalArgs = "--debug --dry-run"
             Octopus.Action.Helm.ChartDirectory = "charts/merchant-portal"
             Octopus.Action.Helm.Namespace = "#{Tenant.Helm.Namespace}"
             Octopus.Action.Helm.ReleaseName = "#{Project.Helm.Release}"
@@ -31,15 +30,15 @@ step "deploy-a-helm-chart" {
             Octopus.Action.Helm.TemplateValuesSources = <<-EOT
                 [
                   {
-                    "Type": "InlineYaml",
-                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}-from-inline\n  DATA_REGION: #{Tenant.DataRegion}-from-inline\n"
-                  },
-                  {
                     "Type": "KeyValues",
                     "Value": {
                       "env.BRAND_COLOR": "#{Tenant.BrandColor}-from-keyval",
                       "env.DATA_REGION": "#{Tenant.DataRegion}-from-keyval"
                     }
+                  },
+                  {
+                    "Type": "InlineYaml",
+                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}-from-inline\n  DATA_REGION: #{Tenant.DataRegion}-from-inline\n"
                   },
                   {
                     "Type": "GitRepository",
