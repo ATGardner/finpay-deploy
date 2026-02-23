@@ -1,26 +1,3 @@
-step "run-a-script" {
-    name = "Run a Script"
-    properties = {
-        Octopus.Action.TargetRoles = "merchants-k8s"
-    }
-
-    action {
-        action_type = "Octopus.Script"
-        properties = {
-            Octopus.Action.RunOnServer = "false"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                echo "color: $(get_octopusvariable "Tenant.BrandColor")"
-                echo "region $(get_octopusvariable "Tenant.DataRegion")"
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "Bash"
-            OctopusUseBundledTooling = "False"
-        }
-        tenant_tags = ["asd/qwe"]
-        worker_pool_variable = ""
-    }
-}
-
 step "approve-before-production" {
     name = "Approve before production"
 
@@ -55,14 +32,15 @@ step "deploy-a-helm-chart" {
                 [
                   {
                     "Type": "InlineYaml",
-                    "Value": "env:\n  DATA_REGION: #{Tenant.DataRegion}\n  BRAND_COLOR: #{Tenant.BrandColor}\n  SOMETHING: else"
+                    "Value": "# env:\n#   DATA_REGION: #{Tenant.DataRegion}\n#   BRAND_COLOR: #{Tenant.BrandColor}\n#   SOMETHING: else"
                   },
                   {
                     "Type": "KeyValues",
                     "Value": {
                       "env.BRAND_COLOR": "hard-coded",
                       "env.AAA": "bbb",
-                      "env.BRAND_COLOR2": "zzz"
+                      "env.BRAND_COLOR2": "zzz",
+                      "env.Brand_COLO": "111"
                     }
                   },
                   {
