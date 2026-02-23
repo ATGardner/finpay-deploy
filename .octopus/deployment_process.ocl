@@ -8,6 +8,7 @@ step "approve-before-production" {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Approve before Production"
             Octopus.Action.Manual.ResponsibleTeamIds = "global/risk"
+            Octopus.Action.RunOnServer = "false"
         }
     }
 }
@@ -22,6 +23,7 @@ step "deploy-a-helm-chart" {
         action_type = "Octopus.HelmChartUpgrade"
         properties = {
             Octopus.Action.GitRepository.Source = "External"
+            Octopus.Action.Helm.AdditionalArgs = "--debug --dry-run"
             Octopus.Action.Helm.ChartDirectory = "charts/merchant-portal"
             Octopus.Action.Helm.Namespace = "#{Tenant.Helm.Namespace}"
             Octopus.Action.Helm.ReleaseName = "#{Project.Helm.Release}"
