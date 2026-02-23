@@ -37,10 +37,7 @@ step "deploy-a-helm-chart" {
                   {
                     "Type": "KeyValues",
                     "Value": {
-                      "env.BRAND_COLOR": "hard-coded",
-                      "env.AAA": "bbb",
-                      "env.BRAND_COLOR2": "zzz",
-                      "env.Brand_COLO": "111"
+                      "env.BRAND_COLOR": "hard-coded"
                     }
                   },
                   {
