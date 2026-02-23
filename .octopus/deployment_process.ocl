@@ -60,8 +60,9 @@ step "deploy-a-helm-chart" {
                   {
                     "Type": "KeyValues",
                     "Value": {
-                      "env.BRAND_COLOR": "#{Tenant.BrandColor}-2",
-                      "env.AAA": "bbb"
+                      "env.BRAND_COLOR": "#{Tenant.BrandColor}2",
+                      "env.AAA": "bbb",
+                      "env.BRAND_COLOR2": "zzz"
                     }
                   },
                   {
