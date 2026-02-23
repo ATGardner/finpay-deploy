@@ -37,7 +37,7 @@ step "deploy-a-helm-chart" {
                   {
                     "Type": "KeyValues",
                     "Value": {
-                      "env.BRAND_COLOR": "hard-coded"
+                      "env.BRAND_COLOR": "#{Tenant.BrandColor}"
                     }
                   },
                   {
