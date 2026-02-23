@@ -58,6 +58,12 @@ step "deploy-a-helm-chart" {
                     "Value": "env:\n  DATA_REGION: #{Tenant.DataRegion}\n  BRAND_COLOR: #{Tenant.BrandColor}\n  SOMETHING: else"
                   },
                   {
+                    "Type": "KeyValues",
+                    "Value": {
+                      "env.BRAND_COLOR": "#{Tenant.BrandColor}-2"
+                    }
+                  },
+                  {
                     "Type": "GitRepository",
                     "GitRepositorySource": "External",
                     "GitDependencyName": "TemplateValues-1",
