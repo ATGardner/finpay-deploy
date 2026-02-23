@@ -30,15 +30,8 @@ step "deploy-a-helm-chart" {
             Octopus.Action.Helm.TemplateValuesSources = <<-EOT
                 [
                   {
-                    "Type": "KeyValues",
-                    "Value": {
-                      "env.BRAND_COLOR": "#{Tenant.BrandColor}",
-                      "env.DATA_REGION": "#{Tenant.DataRegion}"
-                    }
-                  },
-                  {
                     "Type": "InlineYaml",
-                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}-from-inline\n  DATA_REGION: #{Tenant.DataRegion}-from-inline\n"
+                    "Value": "env:\n  BRAND_COLOR: \"#{Tenant.BrandColor}\"\n  DATA_REGION: \"{Tenant.DataRegion}\"\n"
                   },
                   {
                     "Type": "GitRepository",
