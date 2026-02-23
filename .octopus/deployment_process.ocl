@@ -32,8 +32,8 @@ step "deploy-a-helm-chart" {
                   {
                     "Type": "KeyValues",
                     "Value": {
-                      "env.BRAND_COLOR": "#{Tenant.BrandColor}-from-keyval",
-                      "env.DATA_REGION": "#{Tenant.DataRegion}-from-keyval"
+                      "env.BRAND_COLOR": "#{Tenant.BrandColor}",
+                      "env.DATA_REGION": "#{Tenant.DataRegion}"
                     }
                   },
                   {
