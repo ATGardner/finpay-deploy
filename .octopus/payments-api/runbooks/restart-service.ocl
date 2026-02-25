@@ -1,0 +1,32 @@
+name = "Restart Service"
+default_guided_failure_mode = "EnvironmentDefault"
+description = ""
+
+connectivity_policy {
+    allow_deployments_to_no_targets = true
+}
+
+run_retention_policy {
+    type = "Default"
+}
+
+process {
+    step "restart-rollout" {
+        name = "Restart rollout"
+        properties = {
+            Octopus.Action.TargetRoles = "payments-k8s"
+        }
+
+        action {
+            action_type = "Octopus.KubernetesRunScript"
+            properties = {
+                Octopus.Action.KubernetesContainers.Namespace = "#{Project.Helm.Namespace}"
+                Octopus.Action.Script.ScriptBody = "kubectl rollout restart deployment/fraud-detector"
+                Octopus.Action.Script.ScriptSource = "Inline"
+                Octopus.Action.Script.Syntax = "Bash"
+            }
+            worker_pool = "hosted-windows"
+            worker_pool_variable = ""
+        }
+    }
+}

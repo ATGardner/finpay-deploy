@@ -1,0 +1,63 @@
+step "approve-before-production" {
+    name = "Approve before Production"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Approve before Production"
+            Octopus.Action.Manual.ResponsibleTeamIds = "global/risk"
+        }
+    }
+}
+
+step "deploy-fraud-detector" {
+    name = "Deploy fraud-detector"
+    properties = {
+        Octopus.Action.TargetRoles = "payments-k8s"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.GitRepository.Source = "External"
+            Octopus.Action.Helm.ChartDirectory = "charts/fraud-detector"
+            Octopus.Action.Helm.Namespace = "#{Project.Helm.Namespace}"
+            Octopus.Action.Helm.ReleaseName = "fraud-detector"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Helm.TemplateValuesSources = <<-EOT
+                [
+                  {
+                    "Type": "GitRepository",
+                    "GitRepositorySource": "External",
+                    "GitDependencyName": "TemplateValues-1",
+                    "ValuesFilePaths": "charts/fraud-detector/values.yaml\ncharts/fraud-detector/#{Project.Helm.Values}"
+                  },
+                  {
+                    "Type": "InlineYaml",
+                    "Value": "image:\n  tag: 1.24-alpine"
+                  }
+                ]
+                EOT
+            Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+        }
+        worker_pool = "hosted-windows"
+        worker_pool_variable = ""
+
+        git_dependencies {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-3"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/ATGardner/finpay-deploy"
+        }
+
+        git_dependencies "TemplateValues-1" {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-3"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/ATGardner/finpay-deploy"
+        }
+    }
+}
