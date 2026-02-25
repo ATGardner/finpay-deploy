@@ -15,3 +15,7 @@ variable "Project.Helm.Namespace" {
 variable "Project.Helm.Values" {
     value "values-#{Octopus.Environment.Name | ToLower}.yaml" {}
 }
+
+variable "something" {
+    value "blah blah" {}
+}
