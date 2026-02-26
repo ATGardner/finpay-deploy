@@ -8,6 +8,7 @@ step "approve-before-production" {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Approve before Production"
             Octopus.Action.Manual.ResponsibleTeamIds = "global/risk"
+            Octopus.Action.RunOnServer = "false"
         }
     }
 }
@@ -30,7 +31,7 @@ step "deploy-a-helm-chart" {
                 [
                   {
                     "Type": "InlineYaml",
-                    "Value": "env:\n  BRAND_COLOR: #{Tenant.BrandColor}\n  DATA_REGION: #{Tenant.DataRegion}"
+                    "Value": "env:\n  BRAND_COLOR: \"#{Tenant.BrandColor}\"\n  DATA_REGION: \"#{Tenant.DataRegion}\"\n"
                   },
                   {
                     "Type": "GitRepository",
